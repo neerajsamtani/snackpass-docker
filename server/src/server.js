@@ -38,12 +38,13 @@ db.on("error", err => {
 db.once("open", () => console.log("Successfully connected to mongo"));
 
 // Setup routes to respond to client
-app.get("/welcome", async (req, res) => {
+app.get("/api/orders", async (req, res) => {
   console.log("Client request received");
   const user = await User.find().exec();
   console.log(user[0].name);
   res.send(
-    `Hello Client! There is one record in the database for ${user[0].name}`
+    [`Hello Client! There is one record in the database for ${user[0].name}`,
+    " | Hard Coded String"]
   );
 });
 
