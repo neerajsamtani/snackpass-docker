@@ -50,6 +50,7 @@ const App = (props) => {
     } 
 } 
 
+// TODO: Set time somewhere
 const currentTime = new Date("2021-03-14 12:17:00")
 
   return (

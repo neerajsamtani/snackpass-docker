@@ -56,21 +56,13 @@ const order = new Order({
   totalProducts: 12
 });
 
-// Setup routes to respond to client
-// app.get("/api/orders", async (req, res) => {
-//   console.log("Client request received");
-//   const order = await Order.find().exec();
-//   console.log(order);
-//   res.send(
-//     [`Hello Client! There is one record in the database for ${order[0]["Item Name"]}`,
-//     " | Hard Coded String"]
-//   );
-// });
+const twoDaysAgo = new Date("2021-03-12T12:17:00Z")
 
 app.get("/api/orders", async (req, res) => {
   console.log("Client request received");
-  // const order = await Order.find({'Item Name': 'Garlic Naan'}).exec();
+  // TODO: Custom Mongo Sorting Function for Trending
   const agg = await Order.aggregate([
+      {$match: {'Order Time' : { $gte : twoDaysAgo.toISOString() }}},
       {$group: {_id : {itemName : '$Item Name', price:'$Product Price'}, totalOrders:{$sum :1}, mostRecentOrder:{$max :'$Order Time'}}},
       {$project : {itemName : '$_id.itemName', price : '$_id.price', totalOrders : '$totalOrders', mostRecentOrder: '$mostRecentOrder', _id : 0}},
       { $sort : { mostRecentOrder : -1 } }
