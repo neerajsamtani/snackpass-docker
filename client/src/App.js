@@ -21,7 +21,15 @@ const App = (props) => {
   return (
     <div className="App">
         <Header />
-        <ProductList orders={orders} />
+        {
+          orders.length === 0 
+          ? 
+            (<div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>)
+          : 
+            <ProductList orders={orders} />
+        }
     </div>
   )
 }
