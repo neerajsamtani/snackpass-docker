@@ -1,0 +1,15 @@
+# mongo/Dockerfile-dev
+
+# Install mongo image in container
+FROM mongo
+
+# Create and set the working directory
+RUN mkdir -p /app/mongo
+WORKDIR /app/mongo
+
+# Copy the data files over
+COPY . /app/mongo/
+
+# RUN mongoimport --type csv -d test -c orders --headerline --drop ordersWithTime.csv
+# Command to import data
+# CMD ["mongoimport", "--type", "csv", "-d", "test", "-c", "orders", "--headerline", "--drop", "ordersWithTime.csv"]

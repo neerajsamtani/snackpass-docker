@@ -60,7 +60,11 @@ services:
   ### SETUP DB CONTAINER
   ##########################
   db:
-    image: mongo
+    build:
+      context: ./mongo
+      dockerfile: Dockerfile-dev
     ports:
       - 27017:27017
+    volumes:
+      - ./mongo:/app/mongo
     restart: always
