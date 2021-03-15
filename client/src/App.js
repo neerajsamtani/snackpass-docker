@@ -19,7 +19,7 @@ const App = (props) => {
   useEffect(hook, [])
 
   return (
-    <div className="App">
+    <div className="App" >
         <Header />
         {
           orders.length === 0 

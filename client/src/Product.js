@@ -37,8 +37,8 @@ const Product = ({ order }) => {
 const currentTime = new Date("2021-03-14 12:17:00")
 
     return (
-      <div class="card mb-3" style={{"max-width": "540px"}}>
-        <div class="row g-0">
+      <div class="card mb-3">
+        <div class="row g-0 " >
             <div class="col-md-4">
             <img src={snackpass_logo} alt="snackpass-logo" style={{"max-width": "170px"}} />
             </div>
@@ -46,7 +46,7 @@ const currentTime = new Date("2021-03-14 12:17:00")
             <div class="card-body">
                 <h5 class="card-title">{order.itemName}</h5>
                 <p>  ${order.price} </p>
-                <p class="card-text"> {order.totalOrders} purchased recently </p>
+                <p class="card-text badge bg-secondary"> {order.totalOrders} purchased recently  </p>
                 <p class="card-text"><small class="text-muted">Last ordered {timeDiff(currentTime, new Date(order.mostRecentOrder))}</small></p>
             </div>
             </div>
