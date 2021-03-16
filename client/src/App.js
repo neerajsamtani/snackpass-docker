@@ -4,10 +4,10 @@ import axios from "axios";
 import Header  from './Header'
 import ProductList from './ProductList'
 
-const App = (props) => {
+const App = () => {
 
+  // Fetch Orders from database
   const [orders, setOrders] = useState([])
-
   const hook = () => {
       axios
       .get('/api/trendingOrders')
@@ -15,12 +15,12 @@ const App = (props) => {
           setOrders(response.data)
       })
   }
-
   useEffect(hook, [])
 
   return (
     <div className="App" >
         <Header />
+        {/* Displat a Spinner while waiting for data to load */}
         {
           orders.length === 0 
           ? 

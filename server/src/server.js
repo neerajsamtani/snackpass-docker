@@ -37,6 +37,7 @@ db.on("error", err => {
 });
 db.once("open", () => console.log("Successfully connected to mongo"));
 
+// Create the Order Schema
 const orderSchema = new mongoose.Schema({
   orderID: Number,
   restaurant: String,
@@ -47,20 +48,9 @@ const orderSchema = new mongoose.Schema({
   orderTime: Date
 })
 const Order = mongoose.model("Order", orderSchema);
-const order = new Order({
-  orderID: 25583,
-  restaurant: "Hogwarts",
-  itemName: "Minty Sauce",
-  quantity: 1,
-  productPrice: 0.5,
-  totalProducts: 12
-});
 
-// Setup a records in the database to retrieve
-// mongoimport --type csv -d db -c orders --headerline --drop ordersWithTime.csv
-
-app.listen(port, () => console.log(`Listening on port ${port}`));
-
+// Get the trending orders
+// This is a complex aggregation query and contains the main logic of this project
 app.get("/api/trendingOrders", async (req, res) => {
   const today = new Date()
   const days = 86400000 //number of milliseconds in a day
@@ -74,15 +64,17 @@ app.get("/api/trendingOrders", async (req, res) => {
               totalRecentOrders : {
                 $accumulator:
                 {
-                  init: function() {                        // Set the initial state
+                   // Set the initial state
+                  init: function() {                       
                     return { sum: 0, orderTime: "" }
                   },
   
-                  accumulate: function(state, numOrders, thisOrderTime) {  // Define how to update the state
-                    // I defined "recently" to be 3 hours ago
+                  // Define how to update the state
+                  accumulate: function(state, numOrders, thisOrderTime) {  
+                    // I defined "recently" to be 2 hours ago
                     const today = new Date()
                     const hours = 3600000 //number of milliseconds in an hour
-                    const threeHoursAgo = new Date(today - (3*hours))
+                    const threeHoursAgo = new Date(today - (2*hours))
                     if (new Date(thisOrderTime) - threeHoursAgo > 0) {
                       numOrders = state.sum + numOrders
                     } else {
@@ -95,16 +87,19 @@ app.get("/api/trendingOrders", async (req, res) => {
                     }
                   },
   
-                  accumulateArgs: ["$Quantity", "$Order Time"],              // Argument required by the accumulate function
+                  // Argument required by the accumulate function
+                  accumulateArgs: ["$Quantity", "$Order Time"],              
   
-                  merge: function(state1, state2) {         // When the operator performs a merge,
+                   // When the operator performs a merge,
+                  merge: function(state1, state2) {        
                     return {   
                       orderTime: state1.orderTime,
                       sum: state1.sum + state2.sum
                     }
                   },
   
-                  finalize: function(state) {               // After collecting the results from all documents,
+                  // After collecting the results from all documents,
+                  finalize: function(state) {               
                     return (state.sum)
                   },
                   lang: "js"
@@ -113,6 +108,7 @@ app.get("/api/trendingOrders", async (req, res) => {
           },
     {$project : {itemName : '$_id.itemName', price : '$_id.price', totalOrders : '$totalOrders', 
                   totalRecentOrders : '$totalRecentOrders', mostRecentOrder: '$mostRecentOrder',
+                  // The trending score calculation is explained in the README.md file
                 trendingScore:
                   {$divide: [
                     {$pow: [
@@ -130,3 +126,5 @@ app.get("/api/trendingOrders", async (req, res) => {
   ])
   await res.json(agg)
 });
+
+app.listen(port, () => console.log(`Listening on port ${port}`));

@@ -4,6 +4,7 @@ import datetime
 import csv
 
 def generate_random_time():
+    # Create data for the past 3 days
     today = datetime.datetime.now()
     random_day = int(today.strftime('%d')) - random.randint(0, 2)
     this_month = int(today.strftime('%m'))
@@ -22,15 +23,18 @@ def generate_random_time():
 
 orderTimeDict = {}
 
+# We read and write CSV files
 readCSVFile = open("orders.csv", newline='')
 writeCSVFile = open("ordersWithTime.csv", 'w+', newline='')
 reader = csv.reader(readCSVFile, delimiter=',')
 writer = csv.writer(writeCSVFile, delimiter=',')
 
+# The first row is the header, so we simply append a title
 row1 = next(reader)
 row1.append("Order Time")
 writer.writerow(row1)
 
+# Append a random time to each row
 for row in reader:
     orderId = row[0]
     if orderId in orderTimeDict:

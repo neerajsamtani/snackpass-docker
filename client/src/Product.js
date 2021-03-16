@@ -2,7 +2,8 @@ import snackpass_logo from './assets/snackpass-logo.png'
 
 const Product = ({ order }) => {
 
-    // Function copied from https://www.geeksforgeeks.org/get-the-relative-timestamp-difference-between-dates-in-javascript/
+    // timeDiff function copied from
+    // https://www.geeksforgeeks.org/get-the-relative-timestamp-difference-between-dates-in-javascript/
   function timeDiff(curr, prev) { 
     var ms_Min = 60 * 1000; // milliseconds in Minute 
     var ms_Hour = ms_Min * 60; // milliseconds in Hour 
@@ -40,6 +41,7 @@ const currentTime = new Date()
       <div className="card mb-3">
         <div className="row g-0 " >
             <div className="col-md-4">
+                {/* In production each item would have an image. Here I just use the Snackpass logo. */}
             <img src={snackpass_logo} alt="snackpass-logo" style={{"maxWidth": "170px"}} />
             </div>
             <div className="col-md-8">
