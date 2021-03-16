@@ -56,25 +56,28 @@ I then rank items in descending order of score ```Score = (R^2)/(OT/1000)^G``` w
 (number of orders in the past 2 hours), OT is the time since the most recent order of that product (in milliseconds),
 and G is gravity, which causes the trending score of an item to drop over time. 
 
+Below we can see how the trending score (y) is affected over time (x). The sliders R and Q set the number of recent orders for 
+for products R and Q.
+
 ![Image of Graphs](./trending_scores_graph.png)
 
 ## Setup and Run
 
-Move to the root directory and execute these commands
-
 ### 1. Simulate the data
+Go into the ```mongo``` directory and execute
 ```
-cd mongo && python3 create_data.py && cd ..
+python3 create_data.py
 ```
 
 ### 2. Compose the containers
-Leave this terminal open to view logs
+From the root directory execute the following command. Leave this terminal open to view logs.
 ```
 docker-compose -f dev-docker-compose.yml up --build
 ```
 
+
 ### 3. Setup a records in the database to retrieve (Run this command in a separate terminal)
-Only execute this after the previous command has finished setting up the container
+Execute this final command from the root directory in a separate terminal
 ```
 docker exec snackpass-docker_db_1 mongoimport --type csv -d db -c orders --headerline --drop ordersWithTime.csv
 ```

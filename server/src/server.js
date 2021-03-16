@@ -57,10 +57,15 @@ app.get("/api/trendingOrders", async (req, res) => {
   const twoDaysAgo = new Date(today - (2*days))
 
   const agg = await Order.aggregate([
+    // Ensure item has been ordered at least once in the past 48 hours
     {$match: {$and: [ {'Order Time' : {$gte :  twoDaysAgo.toISOString(), $lte :  today.toISOString()} }]} },
+    // Group by item name and price
     {$group: {_id : {itemName : '$Item Name', price:'$Product Price'}, 
+              // find number of total orders and the most recent order
               totalOrders:{$sum :1}, 
               mostRecentOrder:{$max :'$Order Time'},
+              // Count the number of "recent" orders
+              // Here we define recent to be within the past 2 hours
               totalRecentOrders : {
                 $accumulator:
                 {
@@ -106,6 +111,7 @@ app.get("/api/trendingOrders", async (req, res) => {
                 }
             }}
           },
+    // Separate itemName and price into different variables
     {$project : {itemName : '$_id.itemName', price : '$_id.price', totalOrders : '$totalOrders', 
                   totalRecentOrders : '$totalRecentOrders', mostRecentOrder: '$mostRecentOrder',
                   // The trending score calculation is explained in the README.md file

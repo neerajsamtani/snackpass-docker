@@ -20,7 +20,7 @@ const App = () => {
   return (
     <div className="App" >
         <Header />
-        {/* Displat a Spinner while waiting for data to load */}
+        {/* Display a Spinner while waiting for data to load */}
         {
           orders.length === 0 
           ? 
