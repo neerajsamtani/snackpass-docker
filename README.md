@@ -30,25 +30,28 @@ For sample data, use [Sample Orders](https://docs.google.com/spreadsheets/d/1xfA
 Note: Remember to insert your own random timestamps to fit within 48 hours window.
  
 ## Solution
-Your solution content goes here... Please provide an explaination on 
-1. how you solved the problem
-2. how to setup 
-3. how to run it
-You could be as verbose as you would like for providing details on approach, setup etc.
 
+### How I solved the problem
 
-### Simulate the data
+...to
+
+## Setup and Run
+
+### 1. Simulate the data
 ```
 cd mongo && python create_data.py && cd ..
 ```
 
-### Compose the containers
+### 2. Compose the containers
 ```
 docker-compose -f dev-docker-compose.yml up --build
 ```
 
-### Setup a records in the database to retrieve
+### 3. Setup a records in the database to retrieve
+Run this command in a separate terminal
 ```
 docker exec snackpass-docker_db_1 mongoimport --type csv -d db -c orders --headerline --drop ordersWithTime.csv
 ```
 
+### 4. View the applicaton
+Visit http://localhost:3000/ to view the trending products on Snackpass!
