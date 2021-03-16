@@ -56,33 +56,18 @@ const order = new Order({
   totalProducts: 12
 });
 
-const twoDaysAgo = new Date("2021-03-12T12:17:00Z")
-
-
-// Old Request
-app.get("/api/orders", async (req, res) => {
-  console.log("Client request received");
-  // TODO: Custom Mongo Sorting Function for Trending
-  const agg = await Order.aggregate([
-      {$match: {'Order Time' : { $gte : new Date("2021-03-12T12:17:00Z").toISOString() }}},
-      {$group: {_id : {itemName : '$Item Name', price:'$Product Price'}, totalOrders:{$sum :1}, mostRecentOrder:{$max :'$Order Time'}}},
-      {$project : {itemName : '$_id.itemName', price : '$_id.price', totalOrders : '$totalOrders', mostRecentOrder: '$mostRecentOrder', _id : 0}},
-      { $sort : { mostRecentOrder : -1 } }
-      // ,      { $limit : 25 }
-  ])
-  await res.json(agg)
-});
-
 // Setup a records in the database to retrieve
 // mongoimport --type csv -d db -c orders --headerline --drop ordersWithTime.csv
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 app.get("/api/trendingOrders", async (req, res) => {
-  console.log("Client request received");
-  // TODO: Custom Mongo Sorting Function for Trending Score
+  const today = new Date()
+  const days = 86400000 //number of milliseconds in a day
+  const twoDaysAgo = new Date(today - (2*days))
+
   const agg = await Order.aggregate([
-    {$match: {'Order Time' : { $gte : new Date("2021-03-12T12:17:00Z").toISOString() }}},
+    {$match: {$and: [ {'Order Time' : {$gte :  twoDaysAgo.toISOString(), $lte :  today.toISOString()} }]} },
     {$group: {_id : {itemName : '$Item Name', price:'$Product Price'}, 
               totalOrders:{$sum :1}, 
               mostRecentOrder:{$max :'$Order Time'},
@@ -94,8 +79,11 @@ app.get("/api/trendingOrders", async (req, res) => {
                   },
   
                   accumulate: function(state, numOrders, thisOrderTime) {  // Define how to update the state
-                    // TODO: Don't harcode Date
-                    if (new Date(thisOrderTime) - new Date("2021-03-14T03:16:54Z") > 0) { // TODO: Change this time. Currently 9 hours ago
+                    // I defined "recently" to be 3 hours ago
+                    const today = new Date()
+                    const hours = 3600000 //number of milliseconds in an hour
+                    const threeHoursAgo = new Date(today - (3*hours))
+                    if (new Date(thisOrderTime) - threeHoursAgo > 0) {
                       numOrders = state.sum + numOrders
                     } else {
                       numOrders = state.sum 
@@ -132,7 +120,7 @@ app.get("/api/trendingOrders", async (req, res) => {
                   2]
                     },
                     {$pow: [
-                      {$divide:  [ { $subtract: [{$toDate: "2021-03-14T07:53:00Z"}, {$toDate: '$mostRecentOrder'}] }, 60000]}, // Minutes since last order
+                      {$divide:  [ { $subtract: [{$toDate: today}, {$toDate: '$mostRecentOrder'}] }, 1000]}, // Seconds since last order
                       1.2 // Gravity
                     ]}
                   ]}

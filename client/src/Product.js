@@ -2,11 +2,7 @@ import snackpass_logo from './assets/snackpass-logo.png'
 
 const Product = ({ order }) => {
 
-    // TODO: Edit time data to be within 3 days
-    // TODO: Use current time to calculate last ordered?
-    // TODO: Define recently for X purchased recently
-
-      // Function copied from https://www.geeksforgeeks.org/get-the-relative-timestamp-difference-between-dates-in-javascript/
+    // Function copied from https://www.geeksforgeeks.org/get-the-relative-timestamp-difference-between-dates-in-javascript/
   function timeDiff(curr, prev) { 
     var ms_Min = 60 * 1000; // milliseconds in Minute 
     var ms_Hour = ms_Min * 60; // milliseconds in Hour 
@@ -37,21 +33,22 @@ const Product = ({ order }) => {
         return 'around ' + Math.round(diff / ms_Yr) + ' years ago'; 
     } 
 } 
-// TODO: Set time somewhere
-const currentTime = new Date("2021-03-14T07:55:00Z")
+
+const currentTime = new Date()
 
     return (
-      <div class="card mb-3">
-        <div class="row g-0 " >
-            <div class="col-md-4">
-            <img src={snackpass_logo} alt="snackpass-logo" style={{"max-width": "170px"}} />
+      <div className="card mb-3">
+        <div className="row g-0 " >
+            <div className="col-md-4">
+            <img src={snackpass_logo} alt="snackpass-logo" style={{"maxWidth": "170px"}} />
             </div>
-            <div class="col-md-8">
-            <div class="card-body">
-                <h5 class="card-title">{order.itemName}</h5>
+            <div className="col-md-8">
+            <div className="card-body">
+                <h5 className="card-title">{order.itemName}</h5>
                 <p>  ${order.price} </p>
-                <p class="card-text badge bg-secondary"> {order.totalRecentOrders} purchased recently  </p>
-                <p class="card-text"><small class="text-muted">Last ordered {timeDiff(currentTime, new Date(order.mostRecentOrder))}</small></p>
+                <p className="card-text badge bg-secondary"> {order.totalRecentOrders} purchased recently  </p>
+                {console.log(order)}
+                <p className="card-text"><small className="text-muted">Last ordered {timeDiff(currentTime, new Date(order.mostRecentOrder))}</small></p>
             </div>
             </div>
         </div>

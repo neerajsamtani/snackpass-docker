@@ -25,8 +25,8 @@ const App = (props) => {
           orders.length === 0 
           ? 
             (
-              <div class="spinner-border text-primary" role="status" style={{"position": "fixed", "top": "50%", "left": "50%"}}>
-              <span class="visually-hidden">Loading...</span>
+              <div className="spinner-border text-primary" role="status" style={{"position": "fixed", "top": "50%", "left": "50%"}}>
+              <span className="visually-hidden">Loading...</span>
             </div>
             )
           : 
