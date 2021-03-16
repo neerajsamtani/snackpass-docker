@@ -24,9 +24,11 @@ const App = (props) => {
         {
           orders.length === 0 
           ? 
-            (<div class="spinner-border text-primary" role="status">
+            (
+              <div class="spinner-border text-primary" role="status" style={{"position": "fixed", "top": "50%", "left": "50%"}}>
               <span class="visually-hidden">Loading...</span>
-            </div>)
+            </div>
+            )
           : 
             <ProductList orders={orders} />
         }

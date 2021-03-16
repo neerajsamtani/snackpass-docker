@@ -2,6 +2,10 @@ import snackpass_logo from './assets/snackpass-logo.png'
 
 const Product = ({ order }) => {
 
+    // TODO: Edit time data to be within 3 days
+    // TODO: Use current time to calculate last ordered?
+    // TODO: Define recently for X purchased recently
+
       // Function copied from https://www.geeksforgeeks.org/get-the-relative-timestamp-difference-between-dates-in-javascript/
   function timeDiff(curr, prev) { 
     var ms_Min = 60 * 1000; // milliseconds in Minute 
