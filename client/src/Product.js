@@ -38,7 +38,7 @@ const Product = ({ order }) => {
     } 
 } 
 // TODO: Set time somewhere
-const currentTime = new Date("2021-03-14 12:17:00")
+const currentTime = new Date("2021-03-14T07:55:00Z")
 
     return (
       <div class="card mb-3">
@@ -50,7 +50,7 @@ const currentTime = new Date("2021-03-14 12:17:00")
             <div class="card-body">
                 <h5 class="card-title">{order.itemName}</h5>
                 <p>  ${order.price} </p>
-                <p class="card-text badge bg-secondary"> {order.totalOrders} purchased recently  </p>
+                <p class="card-text badge bg-secondary"> {order.totalRecentOrders} purchased recently  </p>
                 <p class="card-text"><small class="text-muted">Last ordered {timeDiff(currentTime, new Date(order.mostRecentOrder))}</small></p>
             </div>
             </div>

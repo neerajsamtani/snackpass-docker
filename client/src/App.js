@@ -10,7 +10,7 @@ const App = (props) => {
 
   const hook = () => {
       axios
-      .get('/api/orders')
+      .get('/api/trendingOrders')
       .then(response => {
           setOrders(response.data)
       })
