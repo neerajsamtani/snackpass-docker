@@ -4,12 +4,15 @@ import datetime
 import csv
 
 def generate_random_time():
-    random_day = 13 - random.randint(0, 2)
+    today = datetime.datetime.now()
+    random_day = int(today.strftime('%d')) - random.randint(0, 2)
+    this_month = int(today.strftime('%m'))
+    this_year = int(today.strftime('%Y'))
     # Generate peaks around noon and 9pm, relating to lunch and dinner
     if random.random() < 0.5:
-        date = datetime.datetime(2021, 3, random_day, 12, 0)
+        date = datetime.datetime(this_year, this_month, random_day, 12, 0)
     else:
-        date = datetime.datetime(2021, 3, random_day, 21, 0)
+        date = datetime.datetime(this_year, this_month, random_day, 21, 0)
     
     time_offset = np.random.normal(loc=0, scale=180)
     final_date = date + datetime.timedelta(minutes=time_offset)
